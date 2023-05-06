@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Counter from "./components/Counter.jsx";
 import ClassCounter from "./components/ClassCounter.jsx";
 import './styles/App.css';
@@ -14,23 +14,33 @@ function App() {
     {id: 3, title: 'TypeScript', body: 'Description'},
   ])
 
-  const [title, setTitle] = useState('')
+  const [post, setPost] = useState({title: '', body: ''})
+  
 
   const addNewPost = (e) => {
-    e.preventDefault()
-    console.log(title);
+    e.preventDefault();
+    setPosts([...posts, {...post, id: Date.now()}]);
+    setPost({title: '', body: ''});
   }
 
   return (
       <div className="App">
         <form>
+          {/* Управляемы компонент */}
           <MyInput
-            value={title}
-            onChange={e => setTitle(e.target.value)}
+            value={post.title}
+            onChange={e => setPost({...post, title: e.target.value})}
             type="text" 
             placeholder="Название поста"
           />
-          <MyInput type="text" placeholder="Описание поста"/>
+
+          {/* Неконтролируемый компонент */}
+          <MyInput
+            value={post.body}
+            onChange={e => setPost({...post, body: e.target.value})}
+            type="text" 
+            placeholder="Описание поста"
+          />
           <MyButton onClick={addNewPost}>Создать пост</MyButton>
         </form>
         <PostList posts={posts} title={'Список постов 1'}/>
